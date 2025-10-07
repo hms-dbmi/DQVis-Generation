@@ -54,7 +54,7 @@ langchain==0.3.23
 langchain-community==0.3.21
 langchain-core==0.3.51
 langchain-openai==0.3.12
-langchain-text-splitters==0.3.8
+langchain-text-splitters==1.0.0a1
 langsmith==0.3.18
 markdown-it-py==3.0.0
 marko==2.1.3
