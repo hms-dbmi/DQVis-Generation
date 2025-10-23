@@ -24,8 +24,20 @@ class ChartType(Enum):
     DOT = "dot"
     GROUPED_DOT = "grouped_dot"
 
+class TaskType(Enum):
+    RETRIEVE_VALUE = "Retrieve_Value"
+    FILTER = "Filter"
+    COMPUTE_DERIVED_VALUE = "Compute_Derived_Value"
+    FIND_EXTREMUM = "Find_Extremum"
+    SORT = "Sort"
+    DETERMINE_RANGE = "Determine_Range"
+    CHARACTERIZE_DISTRIBUTION = "Characterize_Distribution"
+    FIND_ANOMALIES = "Find_Anomalies"
+    CLUSTER = "Cluster"
+    CORRELATE = "Correlate"
 
-def add_row(df, query_template, spec, constraints, query_type: QueryType, chart_type: ChartType):
+
+def add_row(df, query_template, spec, constraints, query_type: QueryType, chart_type: ChartType, task_types: list[TaskType]):
     spec_key_count = get_total_key_count(spec.to_dict())
     if spec_key_count <= 12:
         complexity = "simple"
@@ -43,7 +55,8 @@ def add_row(df, query_template, spec, constraints, query_type: QueryType, chart_
         "creation_method": "template",
         "chart_type": chart_type.value,
         "chart_complexity": complexity,
-        "spec_key_count": spec_key_count
+        "spec_key_count": spec_key_count,
+        "task_types": task_types
     }
     return df
 
@@ -66,6 +79,7 @@ def generate():
             "chart_type",
             "chart_complexity",
             "spec_key_count",
+            "task_types"
         ]
     )
 
@@ -92,6 +106,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.BARCHART,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+        ]
     )
 
     df = add_row(
@@ -113,6 +130,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.BARCHART,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+        ]
     )
 
 
@@ -135,6 +155,10 @@ def generate():
         ],
         query_type=QueryType.UTTERANCE,
         chart_type=ChartType.BARCHART,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+            TaskType.DETERMINE_RANGE
+        ]
     )
 
     df = add_row(
@@ -156,6 +180,10 @@ def generate():
         ],
         query_type=QueryType.UTTERANCE,
         chart_type=ChartType.BARCHART,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+            TaskType.DETERMINE_RANGE
+        ]
     )
 
     df = add_row(
@@ -185,6 +213,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.BARCHART,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+        ]
     )
 
     df = add_row(
@@ -214,6 +245,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.BARCHART,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+        ]
     )
 
     df = add_row(
@@ -249,6 +283,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.STACKED_BAR,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+        ]
     )
 
     df = add_row(
@@ -285,6 +322,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.STACKED_BAR,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+        ]
     )
 
     df = add_row(
@@ -312,6 +352,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.STACKED_BAR,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+        ]
     )
 
     df = add_row(
@@ -340,6 +383,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.STACKED_BAR,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+        ]
     )
 
     df = add_row(
@@ -366,7 +412,10 @@ def generate():
             overlap,
         ],
         query_type=QueryType.QUESTION,
-        chart_type=ChartType.GROUPED_BAR
+        chart_type=ChartType.GROUPED_BAR,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+        ]
     )
 
     df = add_row(
@@ -396,6 +445,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.GROUPED_BAR,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+        ]
     )
 
     df = add_row(
@@ -424,6 +476,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.STACKED_BAR,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE
+        ]
     )
 
 
@@ -459,6 +514,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.NORMALIZED_BAR,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE
+        ]
     )
 
     df = add_row(
@@ -494,6 +552,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.NORMALIZED_BAR,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE
+        ]
     )
 
     for name, op in [('minimum', Op.min), ('maximum', Op.max), ('average', Op.mean), ('median', Op.median), ('total', Op.sum)]:
@@ -519,6 +580,9 @@ def generate():
             ],
             query_type=QueryType.QUESTION,
             chart_type=ChartType.BARCHART,
+            task_types=[
+                TaskType.COMPUTE_DERIVED_VALUE
+            ]
         )
 
         df = add_row(
@@ -542,6 +606,9 @@ def generate():
             ],
             query_type=QueryType.QUESTION,
             chart_type=ChartType.BARCHART,
+            task_types=[
+                TaskType.COMPUTE_DERIVED_VALUE
+            ]
         )
 
     scatterplot_constraints=[
@@ -563,6 +630,9 @@ def generate():
         constraints=scatterplot_constraints,
         query_type=QueryType.QUESTION,
         chart_type=ChartType.SCATTERPLOT,
+        task_types=[
+            TaskType.CORRELATE
+        ]
     )
 
     df = add_row(
@@ -577,7 +647,14 @@ def generate():
         ),
         constraints=scatterplot_constraints,
         query_type=QueryType.UTTERANCE,
-        chart_type=ChartType.SCATTERPLOT
+        chart_type=ChartType.SCATTERPLOT,
+        task_types=[
+            TaskType.CORRELATE,
+            TaskType.CLUSTER,
+            TaskType.FIND_ANOMALIES,
+            TaskType.DETERMINE_RANGE,
+            TaskType.FIND_EXTREMUM
+        ]
     )
 
     df = add_row(
@@ -604,6 +681,10 @@ def generate():
         ],
         query_type=QueryType.UTTERANCE,
         chart_type=ChartType.STACKED_BAR,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+            TaskType.DETERMINE_RANGE
+        ]
     )
 
     df = add_row(
@@ -630,6 +711,10 @@ def generate():
         ],
         query_type=QueryType.UTTERANCE,
         chart_type=ChartType.STACKED_BAR,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+            TaskType.DETERMINE_RANGE
+        ]
     )
 
     df = add_row(
@@ -651,6 +736,10 @@ def generate():
         ],
         query_type=QueryType.UTTERANCE,
         chart_type=ChartType.CIRCULAR,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+            TaskType.DETERMINE_RANGE
+        ]
     )
 
     df = add_row(
@@ -674,6 +763,10 @@ def generate():
         ],
         query_type=QueryType.UTTERANCE,
         chart_type=ChartType.CIRCULAR,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE,
+            TaskType.DETERMINE_RANGE
+        ]
     )
 
     df = add_row(
@@ -689,6 +782,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.COMPUTE_DERIVED_VALUE
+        ]
     )
 
 
@@ -704,6 +800,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.DETERMINE_RANGE,
+        ]
     )
 
     df = add_row(
@@ -718,6 +817,12 @@ def generate():
         ],
         query_type=QueryType.UTTERANCE,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.DETERMINE_RANGE,
+            TaskType.RETRIEVE_VALUE,
+            TaskType.FIND_ANOMALIES,
+            TaskType.FIND_EXTREMUM
+        ]
     )
 
     df = add_row(
@@ -740,6 +845,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.DETERMINE_RANGE,
+        ]
     )
 
     df = add_row(
@@ -762,6 +870,12 @@ def generate():
         ],
         query_type=QueryType.UTTERANCE,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.DETERMINE_RANGE,
+            TaskType.RETRIEVE_VALUE,
+            TaskType.FIND_ANOMALIES,
+            TaskType.FIND_EXTREMUM
+        ]
     )
 
     df = add_row(
@@ -794,6 +908,11 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.FIND_EXTREMUM,
+            TaskType.RETRIEVE_VALUE,
+            TaskType.COMPUTE_DERIVED_VALUE
+        ]
     )
 
 
@@ -816,6 +935,10 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.FIND_EXTREMUM,
+            TaskType.RETRIEVE_VALUE,
+        ]
     )
 
     df = add_row(
@@ -849,6 +972,11 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.FIND_EXTREMUM,
+            TaskType.RETRIEVE_VALUE,
+            TaskType.COMPUTE_DERIVED_VALUE
+        ]
     )
 
     df = add_row(
@@ -869,6 +997,10 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.FIND_EXTREMUM,
+            TaskType.RETRIEVE_VALUE,
+        ]
     )
 
     df = add_row(
@@ -901,6 +1033,10 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.FIND_EXTREMUM,
+            TaskType.RETRIEVE_VALUE,
+        ]
     )
 
     df = add_row(
@@ -920,6 +1056,9 @@ def generate():
         ],
         query_type=QueryType.UTTERANCE,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.SORT,
+        ]
     )
 
 
@@ -943,6 +1082,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.DETERMINE_RANGE,
+        ]
     )
 
     df = add_row(
@@ -964,6 +1106,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.DETERMINE_RANGE,
+        ]
     )
 
     df = add_row(
@@ -995,6 +1140,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.DETERMINE_RANGE,
+        ]
     )
 
     df = add_row(
@@ -1021,6 +1169,11 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.FIND_EXTREMUM,
+            TaskType.RETRIEVE_VALUE,
+            TaskType.COMPUTE_DERIVED_VALUE
+        ]
     )
 
     df = add_row(
@@ -1042,6 +1195,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.LINE,
+        task_types=[
+            TaskType.CHARACTERIZE_DISTRIBUTION,
+        ]
     )
 
     df = add_row(
@@ -1063,6 +1219,9 @@ def generate():
         ],
         query_type=QueryType.UTTERANCE,
         chart_type=ChartType.LINE,
+        task_types=[
+            TaskType.CHARACTERIZE_DISTRIBUTION,
+        ]
     )
 
     df = add_row(
@@ -1088,7 +1247,10 @@ def generate():
             overlap,
         ],
         query_type=QueryType.QUESTION,
-        chart_type=ChartType.GROUPED_LINE
+        chart_type=ChartType.GROUPED_LINE,
+        task_types=[
+            TaskType.CHARACTERIZE_DISTRIBUTION,
+        ]
     )
 
     df = add_row(
@@ -1114,7 +1276,10 @@ def generate():
             overlap,
         ],
         query_type=QueryType.UTTERANCE,
-        chart_type=ChartType.GROUPED_LINE
+        chart_type=ChartType.GROUPED_LINE,
+        task_types=[
+            TaskType.CHARACTERIZE_DISTRIBUTION,
+        ]
     )
 
     df = add_row(
@@ -1149,6 +1314,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.HEATMAP,
+        task_types=[
+            TaskType.CLUSTER,
+        ]
     )
 
     df = add_row(
@@ -1183,6 +1351,11 @@ def generate():
         ],
         query_type=QueryType.UTTERANCE,
         chart_type=ChartType.HEATMAP,
+        task_types=[
+            TaskType.CLUSTER,
+            TaskType.COMPUTE_DERIVED_VALUE,
+            TaskType.CORRELATE
+        ]
     )
 
 
@@ -1218,6 +1391,11 @@ def generate():
                 ],
                 query_type=QueryType.QUESTION,
                 chart_type=ChartType.HEATMAP,
+                task_types=[
+                    TaskType.CLUSTER,
+                    TaskType.COMPUTE_DERIVED_VALUE,
+                    TaskType.CORRELATE
+                ]
             )
 
 
@@ -1244,6 +1422,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.GROUPED_SCATTER,
+        task_types=[
+            TaskType.CLUSTER,
+        ]
     )
 
     # Histogram
@@ -1270,6 +1451,9 @@ def generate():
             ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.HISTOGRAM,
+        task_types=[
+            TaskType.CHARACTERIZE_DISTRIBUTION,
+        ]
     )
 
     df = add_row(
@@ -1295,6 +1479,9 @@ def generate():
             ],
         query_type=QueryType.UTTERANCE,
         chart_type=ChartType.HISTOGRAM,
+        task_types=[
+            TaskType.CHARACTERIZE_DISTRIBUTION,
+        ]
     )
 
     # KDE
@@ -1320,6 +1507,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.AREA,
+        task_types=[
+            TaskType.CHARACTERIZE_DISTRIBUTION,
+        ]
     )
 
     # Dot plot
@@ -1338,6 +1528,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.DOT,
+        task_types=[
+            TaskType.CHARACTERIZE_DISTRIBUTION,
+        ]
     )
 
 
@@ -1372,6 +1565,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.GROUPED_AREA,
+        task_types=[
+            TaskType.CHARACTERIZE_DISTRIBUTION,
+        ]
     )
 
     df = add_row(
@@ -1393,6 +1589,9 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.GROUPED_DOT,
+        task_types=[
+            TaskType.CHARACTERIZE_DISTRIBUTION,
+        ]
     )
 
     df = add_row(
@@ -1420,6 +1619,10 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.FILTER,
+            TaskType.COMPUTE_DERIVED_VALUE
+        ]
     )
 
     df = add_row(
@@ -1447,6 +1650,10 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.FILTER,
+            TaskType.COMPUTE_DERIVED_VALUE
+        ]
     )
 
     df = add_row(
@@ -1477,6 +1684,10 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.FILTER,
+            TaskType.COMPUTE_DERIVED_VALUE
+        ]
     )
 
     df = add_row(
@@ -1507,6 +1718,10 @@ def generate():
         ],
         query_type=QueryType.QUESTION,
         chart_type=ChartType.TABLE,
+        task_types=[
+            TaskType.FILTER,
+            TaskType.COMPUTE_DERIVED_VALUE
+        ]
     )
 
     return df
