@@ -37,7 +37,7 @@ class TaskType(Enum):
     CORRELATE = "Correlate"
 
 
-def add_row(df, query_template, spec, constraints, query_type: QueryType, chart_type: ChartType, task_types: list[TaskType]):
+def add_row(df, query_template, spec, constraints, query_type: QueryType, chart_type: ChartType, task_types: list[TaskType], description: str = "", design_considerations: str = "", tasks: str = ""):
     spec_key_count = get_total_key_count(spec.to_dict())
     if spec_key_count <= 12:
         complexity = "simple"
@@ -56,7 +56,10 @@ def add_row(df, query_template, spec, constraints, query_type: QueryType, chart_
         "chart_type": chart_type.value,
         "chart_complexity": complexity,
         "spec_key_count": spec_key_count,
-        "task_types": task_types
+        "task_types": task_types,
+        "description": description,
+        "design_considerations": design_considerations,
+        "tasks": tasks
     }
     return df
 
@@ -79,7 +82,10 @@ def generate():
             "chart_type",
             "chart_complexity",
             "spec_key_count",
-            "task_types"
+            "task_types",
+            "description",
+            "design_considerations",
+            "tasks"
         ]
     )
 
@@ -108,7 +114,11 @@ def generate():
         chart_type=ChartType.BARCHART,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
-        ]
+        ],
+        description="Counts entities grouped by a nominal field, displayed as a vertical bar chart.",
+        design_considerations="Vertical orientation chosen because category count is small (<=4), keeping x-axis labels readable.",
+        tasks="Compare counts across categories; identify the most or least common category.",
+
     )
 
     df = add_row(
@@ -132,7 +142,11 @@ def generate():
         chart_type=ChartType.BARCHART,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
-        ]
+        ],
+        description="Counts entities grouped by a nominal field, displayed as a horizontal bar chart.",
+        design_considerations="Horizontal orientation chosen because category count is high (>4), allowing longer labels on the y-axis.",
+        tasks="Compare counts across categories; identify the most or least common category.",
+
     )
 
 
@@ -158,7 +172,11 @@ def generate():
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
             TaskType.DETERMINE_RANGE
-        ]
+        ],
+        description="Creates a vertical bar chart counting entities by a nominal field.",
+        design_considerations="Vertical orientation for small category counts (<=4). Count aggregation applied automatically.",
+        tasks="Compare counts across categories; identify the most or least common category; assess the range of counts.",
+
     )
 
     df = add_row(
@@ -183,7 +201,11 @@ def generate():
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
             TaskType.DETERMINE_RANGE
-        ]
+        ],
+        description="Creates a horizontal bar chart counting entities by a nominal field.",
+        design_considerations="Horizontal orientation for higher category counts (>4), improving label readability.",
+        tasks="Compare counts across categories; identify the most or least common category; assess the range of counts.",
+
     )
 
     df = add_row(
@@ -215,7 +237,11 @@ def generate():
         chart_type=ChartType.BARCHART,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
-        ]
+        ],
+        description="Joins two entities and counts records grouped by a field from the related entity, displayed as a vertical bar chart.",
+        design_considerations="Cross-entity join groups by a field not native to the counted entity. Vertical orientation for small category counts (<=4). Requires a many-to-one relationship.",
+        tasks="Compare counts across categories from a related entity; discover cross-entity frequency patterns.",
+
     )
 
     df = add_row(
@@ -247,7 +273,11 @@ def generate():
         chart_type=ChartType.BARCHART,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
-        ]
+        ],
+        description="Joins two entities and counts records grouped by a field from the related entity, displayed as a horizontal bar chart.",
+        design_considerations="Cross-entity join with horizontal orientation for higher category counts (>4). Requires a many-to-one relationship.",
+        tasks="Compare counts across categories from a related entity; discover cross-entity frequency patterns.",
+
     )
 
     df = add_row(
@@ -285,7 +315,11 @@ def generate():
         chart_type=ChartType.STACKED_BAR,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
-        ]
+        ],
+        description="Joins two entities and produces a vertical stacked bar chart of counts grouped by two nominal fields.",
+        design_considerations="Stacked bars show part-to-whole composition within each category. Vertical layout for small category counts (<=4). Color encodes the secondary grouping field from the related entity.",
+        tasks="Compare group compositions across categories; identify dominant sub-groups within each bar.",
+
     )
 
     df = add_row(
@@ -324,7 +358,11 @@ def generate():
         chart_type=ChartType.STACKED_BAR,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
-        ]
+        ],
+        description="Joins two entities and produces a horizontal stacked bar chart of counts grouped by two nominal fields.",
+        design_considerations="Horizontal orientation for higher category counts (>4). Color encodes the primary grouping field. Cross-entity join required.",
+        tasks="Compare group compositions across categories; identify dominant sub-groups within each bar.",
+
     )
 
     df = add_row(
@@ -354,7 +392,11 @@ def generate():
         chart_type=ChartType.STACKED_BAR,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
-        ]
+        ],
+        description="Counts entities grouped by two nominal fields, displayed as a vertical stacked bar chart.",
+        design_considerations="Vertical stacked layout for small category counts (<=4). Color encodes the sub-group field; x-axis shows the primary grouping.",
+        tasks="Compare group compositions across categories; identify dominant sub-groups within each bar.",
+
     )
 
     df = add_row(
@@ -385,7 +427,11 @@ def generate():
         chart_type=ChartType.STACKED_BAR,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
-        ]
+        ],
+        description="Counts entities grouped by two nominal fields, displayed as a horizontal stacked bar chart.",
+        design_considerations="Horizontal stacked layout for higher category counts (>4). Color encodes the sub-group field.",
+        tasks="Compare group compositions across categories; identify dominant sub-groups within each bar.",
+
     )
 
     df = add_row(
@@ -415,7 +461,11 @@ def generate():
         chart_type=ChartType.GROUPED_BAR,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
-        ]
+        ],
+        description="Counts entities grouped by two nominal fields, displayed as a grouped (side-by-side) vertical bar chart.",
+        design_considerations="Uses xOffset for side-by-side grouping, allowing direct comparison between sub-groups. Suitable for small category counts (<=4).",
+        tasks="Directly compare sub-group counts within and across categories.",
+
     )
 
     df = add_row(
@@ -447,7 +497,11 @@ def generate():
         chart_type=ChartType.GROUPED_BAR,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
-        ]
+        ],
+        description="Counts entities grouped by two nominal fields, displayed as a grouped (side-by-side) horizontal bar chart.",
+        design_considerations="Uses yOffset for side-by-side grouping in horizontal orientation. Chosen when at least one field has more than 4 categories.",
+        tasks="Directly compare sub-group counts within and across categories.",
+
     )
 
     df = add_row(
@@ -478,7 +532,11 @@ def generate():
         chart_type=ChartType.STACKED_BAR,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE
-        ]
+        ],
+        description="Counts entities grouped by two nominal fields, displayed as a horizontal stacked bar chart.",
+        design_considerations="Horizontal stacked layout for higher category counts (>4). Color encodes the sub-group; stacking shows part-to-whole within each bar. Allows up to 10 sub-group categories.",
+        tasks="Compare group compositions across categories; identify dominant sub-groups within each bar.",
+
     )
 
 
@@ -516,7 +574,11 @@ def generate():
         chart_type=ChartType.NORMALIZED_BAR,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE
-        ]
+        ],
+        description="Shows the frequency (proportion) of one nominal field within each category of another, as a vertical normalized bar chart.",
+        design_considerations="Normalization computes proportions per group, enabling fair comparison across groups of different sizes. Vertical layout for small category counts (<=4).",
+        tasks="Compare relative proportions across categories; identify which sub-groups dominate in each group.",
+
     )
 
     df = add_row(
@@ -554,7 +616,11 @@ def generate():
         chart_type=ChartType.NORMALIZED_BAR,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE
-        ]
+        ],
+        description="Shows the frequency (proportion) of one nominal field within each category of another, as a horizontal normalized bar chart.",
+        design_considerations="Normalization for proportional comparison. Horizontal layout for higher category counts (>4).",
+        tasks="Compare relative proportions across categories; identify which sub-groups dominate in each group.",
+
     )
 
     for name, op in [('minimum', Op.min), ('maximum', Op.max), ('average', Op.mean), ('median', Op.median), ('total', Op.sum)]:
@@ -582,7 +648,11 @@ def generate():
             chart_type=ChartType.BARCHART,
             task_types=[
                 TaskType.COMPUTE_DERIVED_VALUE
-            ]
+            ],
+            description=f"Computes the {name} of a quantitative field for each category, displayed as a horizontal bar chart.",
+            design_considerations=f"Horizontal orientation for many categories (>4). Bar length encodes the {name} aggregate value for easy comparison.",
+            tasks=f"Compare the {name} value across categories; identify which group has the highest or lowest {name}.",
+
         )
 
         df = add_row(
@@ -608,7 +678,11 @@ def generate():
             chart_type=ChartType.BARCHART,
             task_types=[
                 TaskType.COMPUTE_DERIVED_VALUE
-            ]
+            ],
+            description=f"Computes the {name} of a quantitative field for each category, displayed as a vertical bar chart.",
+            design_considerations=f"Vertical orientation for few categories (<=4). Bar height encodes the {name} aggregate value.",
+            tasks=f"Compare the {name} value across categories; identify which group has the highest or lowest {name}.",
+
         )
 
     scatterplot_constraints=[
@@ -632,7 +706,11 @@ def generate():
         chart_type=ChartType.SCATTERPLOT,
         task_types=[
             TaskType.CORRELATE
-        ]
+        ],
+        description="Plots two quantitative fields as a scatterplot to explore their relationship.",
+        design_considerations="Point marks on two quantitative axes reveal correlations, clusters, and outliers. Data size capped at 100k rows for rendering performance.",
+        tasks="Assess correlation between two variables; identify outliers and clusters.",
+
     )
 
     df = add_row(
@@ -654,7 +732,11 @@ def generate():
             TaskType.FIND_ANOMALIES,
             TaskType.DETERMINE_RANGE,
             TaskType.FIND_EXTREMUM
-        ]
+        ],
+        description="Creates a scatterplot of two quantitative fields.",
+        design_considerations="Point marks on quantitative x and y axes. Data size capped at 100k rows for performance.",
+        tasks="Assess correlation; identify clusters, outliers, extremes, and the range of both variables.",
+
     )
 
     df = add_row(
@@ -684,7 +766,11 @@ def generate():
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
             TaskType.DETERMINE_RANGE
-        ]
+        ],
+        description="Creates a vertical stacked bar chart of counts grouped by two nominal fields.",
+        design_considerations="Vertical stacked layout for small primary category counts (<=4). Color encodes the secondary field.",
+        tasks="Compare group compositions across categories; assess the overall range of counts.",
+
     )
 
     df = add_row(
@@ -714,7 +800,11 @@ def generate():
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
             TaskType.DETERMINE_RANGE
-        ]
+        ],
+        description="Creates a horizontal stacked bar chart of counts grouped by two nominal fields.",
+        design_considerations="Horizontal stacked layout for higher primary category counts (>4). Color encodes the secondary field.",
+        tasks="Compare group compositions across categories; assess the overall range of counts.",
+
     )
 
     df = add_row(
@@ -739,7 +829,11 @@ def generate():
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
             TaskType.DETERMINE_RANGE
-        ]
+        ],
+        description="Creates a pie chart showing the frequency distribution of a nominal field.",
+        design_considerations="Arc marks with theta encoding map frequency to angle. Suitable for fields with few categories (<8) where part-to-whole perception is the goal.",
+        tasks="Assess part-to-whole proportions; identify the dominant category.",
+
     )
 
     df = add_row(
@@ -766,7 +860,11 @@ def generate():
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
             TaskType.DETERMINE_RANGE
-        ]
+        ],
+        description="Creates a donut chart showing the frequency distribution of a nominal field.",
+        design_considerations="Donut variant with inner/outer radius creates a hollow center that can improve label readability. Suitable for few categories (<8).",
+        tasks="Assess part-to-whole proportions; identify the dominant category.",
+
     )
 
     df = add_row(
@@ -784,7 +882,11 @@ def generate():
         chart_type=ChartType.TABLE,
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE
-        ]
+        ],
+        description="Counts the total number of records in an entity and displays the result as a single-row table.",
+        design_considerations="Simple rollup with no visual encoding beyond the count value. Useful as a quick data quality or size check.",
+        tasks="Retrieve the total record count for an entity.",
+
     )
 
 
@@ -802,7 +904,11 @@ def generate():
         chart_type=ChartType.TABLE,
         task_types=[
             TaskType.DETERMINE_RANGE,
-        ]
+        ],
+        description="Displays the raw data for an entity as a table for exploration.",
+        design_considerations="No aggregation or transformation applied; shows the underlying data as-is.",
+        tasks="Explore the raw data; understand field values and ranges.",
+
     )
 
     df = add_row(
@@ -822,7 +928,11 @@ def generate():
             TaskType.RETRIEVE_VALUE,
             TaskType.FIND_ANOMALIES,
             TaskType.FIND_EXTREMUM
-        ]
+        ],
+        description="Creates a table displaying the raw data for an entity.",
+        design_considerations="No aggregation or transformation; presents the full dataset for manual inspection.",
+        tasks="Explore raw data; retrieve specific values; identify anomalies and extremes.",
+
     )
 
     df = add_row(
@@ -847,7 +957,11 @@ def generate():
         chart_type=ChartType.TABLE,
         task_types=[
             TaskType.DETERMINE_RANGE,
-        ]
+        ],
+        description="Joins two related entities and displays the combined data as a table.",
+        design_considerations="Cross-entity join enriches the view by combining fields from two related entities. Requires a valid foreign-key relationship.",
+        tasks="Explore combined data from two related entities; understand field values across the join.",
+
     )
 
     df = add_row(
@@ -875,7 +989,11 @@ def generate():
             TaskType.RETRIEVE_VALUE,
             TaskType.FIND_ANOMALIES,
             TaskType.FIND_EXTREMUM
-        ]
+        ],
+        description="Creates a table that joins and displays the combined data of two entities.",
+        design_considerations="Cross-entity join via foreign key. Presents the full combined dataset for manual inspection.",
+        tasks="Explore joined data; retrieve specific values; identify anomalies and extremes.",
+
     )
 
     df = add_row(
@@ -912,7 +1030,11 @@ def generate():
             TaskType.FIND_EXTREMUM,
             TaskType.RETRIEVE_VALUE,
             TaskType.COMPUTE_DERIVED_VALUE
-        ]
+        ],
+        description="Finds which related entity record has the highest count of associated records, displayed as a ranked table with bar indicators.",
+        design_considerations="Groups by foreign key, counts, ranks, and highlights the top record with color encoding. Bar marks on the count column provide visual comparison.",
+        tasks="Identify the record with the most associated entities; compare counts across records.",
+
     )
 
 
@@ -938,7 +1060,11 @@ def generate():
         task_types=[
             TaskType.FIND_EXTREMUM,
             TaskType.RETRIEVE_VALUE,
-        ]
+        ],
+        description="Finds the record with the largest value in a quantitative field, displayed as a ranked table with bar indicators.",
+        design_considerations="Sorts descending by the target field, derives a rank, and highlights the top record with color. Bar marks provide visual magnitude comparison.",
+        tasks="Identify the record with the largest value; compare values across records.",
+
     )
 
     df = add_row(
@@ -976,7 +1102,11 @@ def generate():
             TaskType.FIND_EXTREMUM,
             TaskType.RETRIEVE_VALUE,
             TaskType.COMPUTE_DERIVED_VALUE
-        ]
+        ],
+        description="Joins two entities, computes the maximum of a quantitative field per group, and ranks the results in a table with bar indicators.",
+        design_considerations="Cross-entity join followed by group-level max aggregation. Highlights the top record with color encoding. Useful when the extremum requires aggregation across a relationship.",
+        tasks="Identify which related record has the largest aggregated value; compare across groups.",
+
     )
 
     df = add_row(
@@ -1000,7 +1130,11 @@ def generate():
         task_types=[
             TaskType.FIND_EXTREMUM,
             TaskType.RETRIEVE_VALUE,
-        ]
+        ],
+        description="Finds the record with the smallest value in a quantitative field, displayed as a ranked table with conditional formatting.",
+        design_considerations="Sorts ascending by the target field, derives a rank, and highlights the top record with background color. Uses rect mark for row-level highlighting.",
+        tasks="Identify the record with the smallest value; compare values across records.",
+
     )
 
     df = add_row(
@@ -1036,7 +1170,11 @@ def generate():
         task_types=[
             TaskType.FIND_EXTREMUM,
             TaskType.RETRIEVE_VALUE,
-        ]
+        ],
+        description="Joins two entities, computes the minimum of a quantitative field per group, and ranks the results in a table with conditional formatting.",
+        design_considerations="Cross-entity join followed by group-level min aggregation. Highlights the top record with background color via rect mark.",
+        tasks="Identify which related record has the smallest aggregated value; compare across groups.",
+
     )
 
     df = add_row(
@@ -1058,7 +1196,11 @@ def generate():
         chart_type=ChartType.TABLE,
         task_types=[
             TaskType.SORT,
-        ]
+        ],
+        description="Sorts entity records by a quantitative field and displays the result as an ordered table with in-cell bar marks.",
+        design_considerations="Ordered by the quantitative field with nulls filtered out. In-cell bar marks provide visual comparison of magnitude alongside the text values.",
+        tasks="View records in sorted order; compare relative magnitudes.",
+
     )
 
 
@@ -1084,7 +1226,11 @@ def generate():
         chart_type=ChartType.TABLE,
         task_types=[
             TaskType.DETERMINE_RANGE,
-        ]
+        ],
+        description="Computes the minimum and maximum of a quantitative field and displays them as a single-row table.",
+        design_considerations="Simple rollup of min and max. Filters out nulls before aggregation for accuracy.",
+        tasks="Determine the range of a quantitative field.",
+
     )
 
     df = add_row(
@@ -1108,7 +1254,11 @@ def generate():
         chart_type=ChartType.TABLE,
         task_types=[
             TaskType.DETERMINE_RANGE,
-        ]
+        ],
+        description="Lists all distinct values of a nominal field with their counts, displayed as a table with in-cell bar marks.",
+        design_considerations="Groups by the nominal field and counts occurrences. In-cell bars provide visual frequency comparison. Limits to fields with fewer than 50 categories.",
+        tasks="Determine the range (distinct values) of a nominal field; compare category frequencies.",
+
     )
 
     df = add_row(
@@ -1142,7 +1292,11 @@ def generate():
         chart_type=ChartType.TABLE,
         task_types=[
             TaskType.DETERMINE_RANGE,
-        ]
+        ],
+        description="Computes the min and max of a quantitative field for each category of a nominal field, displayed as a table with range bar marks.",
+        design_considerations="Groups by nominal field, computes min/max and derived range, then orders by range descending. Uses x/x2 encoding to show the span between min and max values.",
+        tasks="Compare the spread of a quantitative field across categories; identify which group has the widest or narrowest range.",
+
     )
 
     df = add_row(
@@ -1173,7 +1327,11 @@ def generate():
             TaskType.FIND_EXTREMUM,
             TaskType.RETRIEVE_VALUE,
             TaskType.COMPUTE_DERIVED_VALUE
-        ]
+        ],
+        description="Finds the most frequent value of a nominal field, displayed as a ranked table with bar marks and conditional formatting.",
+        design_considerations="Groups by nominal field, counts, ranks, and highlights the top value. Combines bar marks for count comparison and background color for emphasis.",
+        tasks="Identify the most frequent category; compare frequencies across all categories.",
+
     )
 
     df = add_row(
@@ -1197,7 +1355,11 @@ def generate():
         chart_type=ChartType.LINE,
         task_types=[
             TaskType.CHARACTERIZE_DISTRIBUTION,
-        ]
+        ],
+        description="Shows the cumulative distribution function (CDF) of a quantitative field as a line chart.",
+        design_considerations="Sorts by value, computes rolling percentile, and draws a line. The CDF reveals the full distribution shape including median, quartiles, and tails.",
+        tasks="Characterize the distribution of a variable; identify median, quartiles, and concentration of values.",
+
     )
 
     df = add_row(
@@ -1221,7 +1383,11 @@ def generate():
         chart_type=ChartType.LINE,
         task_types=[
             TaskType.CHARACTERIZE_DISTRIBUTION,
-        ]
+        ],
+        description="Creates a CDF (cumulative distribution function) plot of a quantitative field.",
+        design_considerations="Sorts values, computes cumulative percentile, and renders as a line chart.",
+        tasks="Characterize the distribution of a variable; identify median, quartiles, and concentration of values.",
+
     )
 
     df = add_row(
@@ -1250,7 +1416,11 @@ def generate():
         chart_type=ChartType.GROUPED_LINE,
         task_types=[
             TaskType.CHARACTERIZE_DISTRIBUTION,
-        ]
+        ],
+        description="Shows the cumulative distribution of a quantitative field for each category of a nominal field, with separate lines per group.",
+        design_considerations="Groups by nominal field before computing per-group CDF. Color encodes group identity. Limited to fewer than 5 groups for readability.",
+        tasks="Compare distributions across groups; identify which groups have higher or lower concentrations of values.",
+
     )
 
     df = add_row(
@@ -1279,7 +1449,11 @@ def generate():
         chart_type=ChartType.GROUPED_LINE,
         task_types=[
             TaskType.CHARACTERIZE_DISTRIBUTION,
-        ]
+        ],
+        description="Creates a CDF plot with a separate line for each category of a nominal field.",
+        design_considerations="Per-group CDF computation with color encoding to distinguish groups. Limited to fewer than 5 groups.",
+        tasks="Compare distributions across groups; identify which groups have higher or lower concentrations of values.",
+
     )
 
     df = add_row(
@@ -1316,7 +1490,11 @@ def generate():
         chart_type=ChartType.HEATMAP,
         task_types=[
             TaskType.CLUSTER,
-        ]
+        ],
+        description="Displays the count of entities for each combination of two nominal fields as a heatmap with labeled cells.",
+        design_considerations="Rect marks with quantitative color encoding show density. Overlaid text marks display exact counts. Text color adapts based on cell intensity for readability.",
+        tasks="Identify clusters or patterns in the co-occurrence of two fields; find the most and least common combinations.",
+
     )
 
     df = add_row(
@@ -1355,7 +1533,11 @@ def generate():
             TaskType.CLUSTER,
             TaskType.COMPUTE_DERIVED_VALUE,
             TaskType.CORRELATE
-        ]
+        ],
+        description="Creates a heatmap showing entity counts for each combination of two nominal fields.",
+        design_considerations="Rect marks with color encoding and text labels. Text color adapts to background intensity. Both axes limited to 30 or fewer categories.",
+        tasks="Identify clusters and patterns; compare counts across combinations; find correlations between two fields.",
+
     )
 
 
@@ -1395,7 +1577,11 @@ def generate():
                     TaskType.CLUSTER,
                     TaskType.COMPUTE_DERIVED_VALUE,
                     TaskType.CORRELATE
-                ]
+                ],
+                description=f"Displays the {name} of a quantitative field for each combination of two nominal fields as a heatmap.",
+                design_considerations=f"Uses three fields: a quantitative measure aggregated by {name}, and two nominal axes. Color encodes the aggregate value. Requires overlapping fields across all three.",
+                tasks=f"Identify patterns in the {name} value across two categorical dimensions; find combinations with extreme values.",
+
             )
 
 
@@ -1424,7 +1610,11 @@ def generate():
         chart_type=ChartType.GROUPED_SCATTER,
         task_types=[
             TaskType.CLUSTER,
-        ]
+        ],
+        description="Plots two quantitative fields as a scatterplot with points colored by a nominal field to reveal group-level clusters.",
+        design_considerations="Adds color encoding to a standard scatterplot to separate groups visually. Limited to fewer than 8 color categories for perceptual clarity.",
+        tasks="Identify clusters that separate by group; assess whether the relationship between two quantitative fields differs across groups.",
+
     )
 
     # Histogram
@@ -1453,7 +1643,11 @@ def generate():
         chart_type=ChartType.HISTOGRAM,
         task_types=[
             TaskType.CHARACTERIZE_DISTRIBUTION,
-        ]
+        ],
+        description="Shows the distribution of a quantitative field as a histogram with automatically computed bins.",
+        design_considerations="Uses binby to create equal-width bins. Rect marks span from bin start to bin end on x, with count on y. Requires high cardinality (>250) to ensure meaningful binning.",
+        tasks="Characterize the shape of a distribution; identify modes, skewness, and gaps.",
+
     )
 
     df = add_row(
@@ -1481,7 +1675,11 @@ def generate():
         chart_type=ChartType.HISTOGRAM,
         task_types=[
             TaskType.CHARACTERIZE_DISTRIBUTION,
-        ]
+        ],
+        description="Creates a histogram of a quantitative field with automatically computed bins.",
+        design_considerations="Uses binby for automatic bin computation. Rect marks show bin ranges and counts. Lower cardinality threshold (>5) than the question variant.",
+        tasks="Characterize the shape of a distribution; identify modes, skewness, and gaps.",
+
     )
 
     # KDE
@@ -1509,7 +1707,11 @@ def generate():
         chart_type=ChartType.AREA,
         task_types=[
             TaskType.CHARACTERIZE_DISTRIBUTION,
-        ]
+        ],
+        description="Shows the distribution of a quantitative field as a smooth density curve (KDE) rendered as an area chart.",
+        design_considerations="Kernel density estimation produces a smooth curve. Area mark fills below the density line. Used for moderate cardinality (50-250) where a smooth estimate is more informative than binning.",
+        tasks="Characterize the shape of a distribution; identify modes and overall density patterns.",
+
     )
 
     # Dot plot
@@ -1530,7 +1732,11 @@ def generate():
         chart_type=ChartType.DOT,
         task_types=[
             TaskType.CHARACTERIZE_DISTRIBUTION,
-        ]
+        ],
+        description="Shows the distribution of a quantitative field as individual points along a single axis.",
+        design_considerations="Point marks on a single quantitative x-axis. Best for small datasets (50 or fewer values) where individual observations are meaningful and overplotting is minimal.",
+        tasks="Characterize the distribution; identify individual values, clusters, and outliers.",
+
     )
 
 
@@ -1567,7 +1773,11 @@ def generate():
         chart_type=ChartType.GROUPED_AREA,
         task_types=[
             TaskType.CHARACTERIZE_DISTRIBUTION,
-        ]
+        ],
+        description="Compares the distribution of a quantitative field across categories using overlapping density curves (KDE) with area and line marks.",
+        design_considerations="Per-group KDE with semi-transparent area fills and line outlines. Color encodes group identity. Limited to fewer than 4 groups to avoid excessive overlap. Opacity set to 0.25 for layering.",
+        tasks="Compare distribution shapes across groups; identify shifts in central tendency or spread.",
+
     )
 
     df = add_row(
@@ -1591,7 +1801,11 @@ def generate():
         chart_type=ChartType.GROUPED_DOT,
         task_types=[
             TaskType.CHARACTERIZE_DISTRIBUTION,
-        ]
+        ],
+        description="Compares the distribution of a quantitative field across categories using dot strips, with one row per category.",
+        design_considerations="Points plotted on a quantitative x-axis with nominal y-axis for group separation. Color reinforces group identity. Best for small datasets (50 or fewer values per group).",
+        tasks="Compare distributions across groups; identify clusters and outliers within each group.",
+
     )
 
     df = add_row(
@@ -1622,7 +1836,11 @@ def generate():
         task_types=[
             TaskType.FILTER,
             TaskType.COMPUTE_DERIVED_VALUE
-        ]
+        ],
+        description="Counts the number of records with a non-null value in a specified field, shown alongside the total with a percentage bar.",
+        design_considerations="Derives total count before filtering, then filters to non-null and counts valid records. Percentage bar and 50%% reference line provide visual context for data completeness.",
+        tasks="Assess data completeness for a field; determine how many records have valid values.",
+
     )
 
     df = add_row(
@@ -1653,7 +1871,11 @@ def generate():
         task_types=[
             TaskType.FILTER,
             TaskType.COMPUTE_DERIVED_VALUE
-        ]
+        ],
+        description="Computes the percentage of records with a non-null value in a specified field, shown with a percentage bar.",
+        design_considerations="Same computation as non-null count but framed as a percentage question. Percentage bar with 50%% reference line aids interpretation.",
+        tasks="Assess data completeness as a proportion; determine what fraction of records have valid values.",
+
     )
 
     df = add_row(
@@ -1687,7 +1909,11 @@ def generate():
         task_types=[
             TaskType.FILTER,
             TaskType.COMPUTE_DERIVED_VALUE
-        ]
+        ],
+        description="Counts the number of records with a null value in a specified field, shown alongside the total with a percentage bar.",
+        design_considerations="Derives null count as total minus valid count. Percentage bar shows the null proportion with a 50%% reference line.",
+        tasks="Assess data quality; determine how many records are missing a value.",
+
     )
 
     df = add_row(
@@ -1721,12 +1947,30 @@ def generate():
         task_types=[
             TaskType.FILTER,
             TaskType.COMPUTE_DERIVED_VALUE
-        ]
+        ],
+        description="Computes the percentage of records with a null value in a specified field, shown with a percentage bar.",
+        design_considerations="Same computation as null count but framed as a percentage. Percentage bar visualizes the null proportion.",
+        tasks="Assess data quality as a proportion; determine what fraction of records are missing a value.",
+
     )
 
     return df
 
 
 if __name__ == "__main__":
+    import os
+
+    os.makedirs('./out', exist_ok=True)
     df = generate()
-    print(df.head())
+
+    # Serialize task_types enum values to strings
+    df['task_types'] = df['task_types'].apply(lambda x: [t.value for t in x])
+
+    print(f"Generated {len(df)} templates.")
+    print(f"\nColumns: {list(df.columns)}")
+    print(f"\nChart types: {df['chart_type'].value_counts().to_dict()}")
+    print(f"Query types: {df['query_type'].value_counts().to_dict()}")
+    print(f"Complexity: {df['chart_complexity'].value_counts().to_dict()}")
+
+    df.to_json('./out/templates.json', orient='records', indent=2)
+    print(f"\nExported to ./out/templates.json")
