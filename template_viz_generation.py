@@ -378,7 +378,7 @@ def generate():
     df = add_row(
         df,
         query_templates=[
-            "What is the frequency of <F1:n> for each <F2:n>?",
+            "What is the proportion of <F1:n> for each <F2:n>?",
         ],
         spec=(
             Chart()
@@ -392,9 +392,9 @@ def generate():
                 on="<F2>",
                 out_name="datasets",
             )
-            .derive({"frequency": "d['<F1>_and_<F2>_count'] / d['<F2>_count']"})
+            .derive({"proportion": "d['<F1>_and_<F2>_count'] / d['<F2>_count']"})
             .mark("bar")
-            .y(field="frequency", type="quantitative")
+            .y(field="proportion", type="quantitative")
             .color(field="<F1>", type="nominal")
             .x(field="<F2>", type="nominal")
         ),
@@ -402,7 +402,7 @@ def generate():
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
         ],
-        description="Shows the frequency (proportion) of one nominal field within each category of another, as a vertical normalized bar chart.",
+        description="Shows the relative frequency (proportion) of one nominal field within each category of another, as a vertical normalized bar chart.",
         design_considerations="Normalization computes proportions per group, enabling fair comparison across groups of different sizes. Vertical layout for small category counts (<=4). Color is preferably mapped to the variable with fewer unique values for better discriminability.",
         tasks="Compare relative proportions across categories; identify which sub-groups dominate in each group.",
     )
@@ -411,7 +411,7 @@ def generate():
     df = add_row(
         df,
         query_templates=[
-            "What is the frequency of <F1:n> for each <F2:n>?",
+            "What is the proportion of <F1:n> for each <F2:n>?",
         ],
         spec=(
             Chart()
@@ -425,9 +425,9 @@ def generate():
                 on="<F2>",
                 out_name="datasets",
             )
-            .derive({"frequency": "d['<F1>_and_<F2>_count'] / d['<F2>_count']"})
+            .derive({"proportion": "d['<F1>_and_<F2>_count'] / d['<F2>_count']"})
             .mark("bar")
-            .x(field="frequency", type="quantitative")
+            .x(field="proportion", type="quantitative")
             .color(field="<F1>", type="nominal")
             .y(field="<F2>", type="nominal")
         ),
@@ -435,7 +435,7 @@ def generate():
         task_types=[
             TaskType.COMPUTE_DERIVED_VALUE,
         ],
-        description="Shows the frequency (proportion) of one nominal field within each category of another, as a horizontal normalized bar chart.",
+        description="Shows the relative frequency (proportion) of one nominal field within each category of another, as a horizontal normalized bar chart.",
         design_considerations="Normalization for proportional comparison. Horizontal layout for higher category counts (>4). Color is preferably mapped to the variable with fewer unique values for better discriminability.",
         tasks="Compare relative proportions across categories; identify which sub-groups dominate in each group.",
     )
@@ -596,9 +596,9 @@ def generate():
             Chart()
             .source("<E>", "<E.url>")
             .groupby('<F>')
-            .rollup({"frequency": Op.frequency()})
+            .rollup({"proportion": Op.frequency()})
             .mark("arc")
-            .theta(field="frequency", type="quantitative")
+            .theta(field="proportion", type="quantitative")
             .color(field="<F>", type="nominal")
         ),
         chart_type=ChartType.CIRCULAR,
@@ -606,8 +606,8 @@ def generate():
             TaskType.COMPUTE_DERIVED_VALUE,
             TaskType.DETERMINE_RANGE,
         ],
-        description="Creates a pie chart showing the frequency distribution of a nominal field.",
-        design_considerations="Arc marks with theta encoding map frequency to angle. Suitable for fields with few categories (<8) where part-to-whole perception is the goal.",
+        description="Creates a pie chart showing the proportional distribution of a nominal field.",
+        design_considerations="Arc marks with theta encoding map proportion to angle. Suitable for fields with few categories (<8) where part-to-whole perception is the goal.",
         tasks="Assess part-to-whole proportions; identify the dominant category.",
     )
 
@@ -621,9 +621,9 @@ def generate():
             Chart()
             .source("<E>", "<E.url>")
             .groupby('<F>')
-            .rollup({"frequency": Op.frequency()})
+            .rollup({"proportion": Op.frequency()})
             .mark("arc")
-            .theta(field="frequency", type="quantitative")
+            .theta(field="proportion", type="quantitative")
             .color(field="<F>", type="nominal")
             .radius(value=60)
             .radius2(value=80)
@@ -633,7 +633,7 @@ def generate():
             TaskType.COMPUTE_DERIVED_VALUE,
             TaskType.DETERMINE_RANGE,
         ],
-        description="Creates a donut chart showing the frequency distribution of a nominal field.",
+        description="Creates a donut chart showing the proportional distribution of a nominal field.",
         design_considerations="Donut variant with inner/outer radius creates a hollow center that can improve label readability. Suitable for few categories (<8).",
         tasks="Assess part-to-whole proportions; identify the dominant category.",
     )
@@ -881,7 +881,7 @@ def generate():
     )
 
     # ---------------------------------------------------------------
-    # Tables — sort, range, frequency
+    # Tables — sort, range, proportion
     # ---------------------------------------------------------------
 
     # Sort by quantitative field
