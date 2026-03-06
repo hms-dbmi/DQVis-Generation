@@ -317,7 +317,7 @@ def generate():
             TaskType.COMPUTE_DERIVED_VALUE,
         ],
         description="Joins two entities and produces a vertical stacked bar chart of counts grouped by two nominal fields.",
-        design_considerations="Stacked bars show part-to-whole composition within each category. Vertical layout for small category counts (<=4). Color encodes the secondary grouping field from the related entity.",
+        design_considerations="Stacked bars show part-to-whole composition within each category. Vertical layout for small category counts (<=4). Color encodes the secondary grouping field from the related entity. Color is preferably mapped to the variable with fewer unique values for better discriminability.",
         tasks="Compare group compositions across categories; identify dominant sub-groups within each bar.",
 
     )
@@ -360,7 +360,7 @@ def generate():
             TaskType.COMPUTE_DERIVED_VALUE,
         ],
         description="Joins two entities and produces a horizontal stacked bar chart of counts grouped by two nominal fields.",
-        design_considerations="Horizontal orientation for higher category counts (>4). Color encodes the primary grouping field. Cross-entity join required.",
+        design_considerations="Horizontal orientation for higher category counts (>4). Color encodes the primary grouping field. Cross-entity join required. Color is preferably mapped to the variable with fewer unique values for better discriminability.",
         tasks="Compare group compositions across categories; identify dominant sub-groups within each bar.",
 
     )
@@ -394,7 +394,7 @@ def generate():
             TaskType.COMPUTE_DERIVED_VALUE,
         ],
         description="Counts entities grouped by two nominal fields, displayed as a vertical stacked bar chart.",
-        design_considerations="Vertical stacked layout for small category counts (<=4). Color encodes the sub-group field; x-axis shows the primary grouping.",
+        design_considerations="Vertical stacked layout for small category counts (<=4). Color encodes the sub-group field; x-axis shows the primary grouping. Color is preferably mapped to the variable with fewer unique values for better discriminability.",
         tasks="Compare group compositions across categories; identify dominant sub-groups within each bar.",
 
     )
@@ -429,7 +429,7 @@ def generate():
             TaskType.COMPUTE_DERIVED_VALUE,
         ],
         description="Counts entities grouped by two nominal fields, displayed as a horizontal stacked bar chart.",
-        design_considerations="Horizontal stacked layout for higher category counts (>4). Color encodes the sub-group field.",
+        design_considerations="Horizontal stacked layout for higher category counts (>4). Color encodes the sub-group field. Color is preferably mapped to the variable with fewer unique values for better discriminability.",
         tasks="Compare group compositions across categories; identify dominant sub-groups within each bar.",
 
     )
@@ -534,7 +534,7 @@ def generate():
             TaskType.COMPUTE_DERIVED_VALUE
         ],
         description="Counts entities grouped by two nominal fields, displayed as a horizontal stacked bar chart.",
-        design_considerations="Horizontal stacked layout for higher category counts (>4). Color encodes the sub-group; stacking shows part-to-whole within each bar. Allows up to 10 sub-group categories.",
+        design_considerations="Horizontal stacked layout for higher category counts (>4). Color encodes the sub-group; stacking shows part-to-whole within each bar. Allows up to 10 sub-group categories. Color is preferably mapped to the variable with fewer unique values for better discriminability.",
         tasks="Compare group compositions across categories; identify dominant sub-groups within each bar.",
 
     )
@@ -576,7 +576,7 @@ def generate():
             TaskType.COMPUTE_DERIVED_VALUE
         ],
         description="Shows the frequency (proportion) of one nominal field within each category of another, as a vertical normalized bar chart.",
-        design_considerations="Normalization computes proportions per group, enabling fair comparison across groups of different sizes. Vertical layout for small category counts (<=4).",
+        design_considerations="Normalization computes proportions per group, enabling fair comparison across groups of different sizes. Vertical layout for small category counts (<=4). Color is preferably mapped to the variable with fewer unique values for better discriminability.",
         tasks="Compare relative proportions across categories; identify which sub-groups dominate in each group.",
 
     )
@@ -618,7 +618,7 @@ def generate():
             TaskType.COMPUTE_DERIVED_VALUE
         ],
         description="Shows the frequency (proportion) of one nominal field within each category of another, as a horizontal normalized bar chart.",
-        design_considerations="Normalization for proportional comparison. Horizontal layout for higher category counts (>4).",
+        design_considerations="Normalization for proportional comparison. Horizontal layout for higher category counts (>4). Color is preferably mapped to the variable with fewer unique values for better discriminability.",
         tasks="Compare relative proportions across categories; identify which sub-groups dominate in each group.",
 
     )
@@ -768,7 +768,7 @@ def generate():
             TaskType.DETERMINE_RANGE
         ],
         description="Creates a vertical stacked bar chart of counts grouped by two nominal fields.",
-        design_considerations="Vertical stacked layout for small primary category counts (<=4). Color encodes the secondary field.",
+        design_considerations="Vertical stacked layout for small primary category counts (<=4). Color encodes the secondary field. Color is preferably mapped to the variable with fewer unique values for better discriminability.",
         tasks="Compare group compositions across categories; assess the overall range of counts.",
 
     )
@@ -802,7 +802,7 @@ def generate():
             TaskType.DETERMINE_RANGE
         ],
         description="Creates a horizontal stacked bar chart of counts grouped by two nominal fields.",
-        design_considerations="Horizontal stacked layout for higher primary category counts (>4). Color encodes the secondary field.",
+        design_considerations="Horizontal stacked layout for higher primary category counts (>4). Color encodes the secondary field. Color is preferably mapped to the variable with fewer unique values for better discriminability.",
         tasks="Compare group compositions across categories; assess the overall range of counts.",
 
     )
@@ -1492,7 +1492,7 @@ def generate():
             TaskType.CLUSTER,
         ],
         description="Displays the count of entities for each combination of two nominal fields as a heatmap with labeled cells.",
-        design_considerations="Rect marks with quantitative color encoding show density. Overlaid text marks display exact counts. Text color adapts based on cell intensity for readability.",
+        design_considerations="Rect marks with quantitative color encoding show density. Overlaid text marks display exact counts. Text color adapts based on cell intensity for readability. The field with more unique values is preferably placed on the y-axis, where longer labels remain readable.",
         tasks="Identify clusters or patterns in the co-occurrence of two fields; find the most and least common combinations.",
 
     )
@@ -1535,7 +1535,7 @@ def generate():
             TaskType.CORRELATE
         ],
         description="Creates a heatmap showing entity counts for each combination of two nominal fields.",
-        design_considerations="Rect marks with color encoding and text labels. Text color adapts to background intensity. Both axes limited to 30 or fewer categories.",
+        design_considerations="Rect marks with color encoding and text labels. Text color adapts to background intensity. Both axes limited to 30 or fewer categories. The field with more unique values is preferably placed on the y-axis for better label readability.",
         tasks="Identify clusters and patterns; compare counts across combinations; find correlations between two fields.",
 
     )
@@ -1579,7 +1579,7 @@ def generate():
                     TaskType.CORRELATE
                 ],
                 description=f"Displays the {name} of a quantitative field for each combination of two nominal fields as a heatmap.",
-                design_considerations=f"Uses three fields: a quantitative measure aggregated by {name}, and two nominal axes. Color encodes the aggregate value. Requires overlapping fields across all three.",
+                design_considerations=f"Uses three fields: a quantitative measure aggregated by {name}, and two nominal axes. Color encodes the aggregate value. Requires overlapping fields across all three. The field with more unique values is preferably placed on the y-axis for better label readability.",
                 tasks=f"Identify patterns in the {name} value across two categorical dimensions; find combinations with extreme values.",
 
             )
